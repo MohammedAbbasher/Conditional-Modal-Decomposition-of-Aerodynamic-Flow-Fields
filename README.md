@@ -101,11 +101,7 @@ $$
 After removing the contribution of the lift mode, the residual fluctuating field is defined as:
 
 $$
-\Phi_{res} =
-
-\Phi'-
-
-a_{cl}\phi_{cl}
+\Phi_{res} = \Phi'-a_{cl}\phi_{cl}
 $$
 
 The drag modal coefficient is then computed from:
