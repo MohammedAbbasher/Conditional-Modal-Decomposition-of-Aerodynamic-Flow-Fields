@@ -7,7 +7,7 @@ https://www.cambridge.org/core/journals/journal-of-fluid-mechanics/article/abs/s
 
 # Methodology
 
-The instantaneous fluctuating flow field is defined as
+The instantaneous fluctuating flow field is defined as:
 
 $$
 \Phi' = \Phi - \Phi_{mean}
@@ -24,41 +24,98 @@ v
 \end{bmatrix}
 $$
 
-contains pressure and velocity components.
+contains the instantaneous pressure and velocity components, and
 
-The framework computes:
+$$
+\Phi_{mean}
+$$
 
-Lift-related conditional mode:
+represents the time-averaged flow field.
+
+---
+
+# Conditional Averaging and Modal Construction
+
+The framework constructs conditional aerodynamic modes associated with the dominant lift and drag dynamics of the flow.
+
+The lift-related conditional mode:
 
 $$
 \phi_{cl}
 $$
 
-Drag-related conditional mode:
+is computed using snapshots satisfying:
+
+$$
+C_L > \overline{C_L}
+$$
+
+where
+
+$$
+\overline{C_L}
+$$
+
+is the mean lift coefficient.
+
+Similarly, the drag-related conditional mode:
 
 $$
 \phi_{cd}
 $$
 
-together with their temporal modal coefficients:
+is constructed from residual fluctuating fields satisfying:
+
+$$
+C_D > \overline{C_D}
+$$
+
+where
+
+$$
+\overline{C_D}
+$$
+
+is the mean drag coefficient.
+
+This conditional averaging approach isolates coherent flow structures associated with high-lift and high-drag events during the oscillation cycle.
+
+---
+
+# Modal Projection
+
+The framework computes the temporal modal coefficients:
 
 $$
 a_{cl}, \quad a_{cd}
 $$
 
-The modal coefficients are obtained through projection:
+through inner-product projections of the fluctuating flow fields onto the conditional modes.
+
+The lift modal coefficient is obtained from:
 
 $$
 a_{cl} = \langle \phi_{cl}, \Phi' \rangle
 $$
 
+After removing the contribution of the lift mode, the residual fluctuating field is defined as:
+
+$$
+\Phi_{res}
+==========
+
+## \Phi'
+
+a_{cl}\phi_{cl}
+$$
+
+The drag modal coefficient is then computed from:
+
 $$
 a_{cd} = \langle \phi_{cd}, \Phi_{res} \rangle
 $$
 
-where $\Phi_{res}$ is the residual fluctuating field after removing the contribution of the lift mode.
-
----
+This decomposition separates the dominant lift-related dynamics from the remaining residual flow structures associated with drag fluctuations.
 
 # Main Features
 
@@ -104,45 +161,27 @@ The main routine performs the following operations:
 
 ---
 
-# Interpolation Strategy
 
-The interpolation is written as
 
-$$
-q_{ordered} = W q_{unordered}
-$$
+# Input Files and Grid Configuration
 
-where:
+The repository expects the following CFD input files:
 
-* $q_{unordered}$ represents the original ANSYS field
-* $q_{ordered}$ represents the structured Pointwise field
-* $W$ is the sparse interpolation matrix
+```text
+mesh_file.x
+mean_flow.mat
+cl.out
+cd.out
+snapshot-*
+```
 
-The interpolation operator is constructed only once and reused throughout the simulation, significantly reducing computational cost.
-
----
-
-# Conditional Averaging
-
-The lift mode is computed using snapshots satisfying:
-
-$$
-CL > \overline{CL}
-$$
-
-Similarly, the drag mode is constructed from residual fields satisfying:
-
-$$
-CD > \overline{CD}
-$$
-
-This approach isolates coherent structures associated with high-lift and high-drag events.
+These files contain the computational mesh, mean flow solution, aerodynamic coefficients, and instantaneous flow snapshots required for the conditional modal decomposition workflow.
 
 ---
 
-# Grid Definitions
+# Structured Grid Definition
 
-The structured mesh dimensions are defined as:
+The structured Pointwise mesh dimensions are defined in `main.py` as:
 
 ```python
 ni = 601
@@ -154,33 +193,208 @@ where:
 * `ni` is the maximum number of indices in the streamwise direction
 * `nj` is the maximum number of indices in the wall-normal direction
 
-The original ANSYS mesh dimensions are:
+The original CFD mesh dimensions are defined as:
 
 ```python
 ni_ansys = ni - 1
 nj_ansys = nj - 1
 ```
 
+The CFD solution is interpolated from the original solver mesh onto the structured Pointwise mesh using:
+
+$$
+q_{ordered} = W q_{unordered}
+$$
+
+where:
+
+* $q_{unordered}$ is the original CFD field
+* $q_{ordered}$ is the structured Pointwise field
+* $W$ is the sparse interpolation matrix
+
 ---
 
-# Snapshot Sampling
+# Snapshot Synchronization and Sampling
 
-The flow-field snapshots are sampled using:
-
-```python
-snapshot_step = 5
-```
-
-This means flow variables were stored every 5 timesteps compared to the aerodynamic coefficient files (`CL` and `CD`) to reduce memory requirements.
-
-The synchronization starting location is defined using:
+The aerodynamic coefficients and flow snapshots are synchronized using:
 
 ```python
 start_index = 24004
 ```
 
-which corresponds to the beginning of the analyzed oscillation cycle.
+This index corresponds to the beginning of the analyzed oscillation cycle used for the modal decomposition.
 
+The flow snapshots are sampled using:
+
+```python
+snapshot_step = 5
+```
+
+This means the flow variables were stored every 5 timesteps relative to the aerodynamic coefficient history files (`CL` and `CD`) to reduce memory and storage requirements.
+
+The aerodynamic coefficients are sampled as:
+
+```python
+cl = cl1[start_index::snapshot_step, 1]
+cd = cd1[start_index::snapshot_step, 1]
+```
+
+to ensure synchronization with the stored CFD snapshots.
+
+---
+
+# `mesh_file.x`
+
+Structured Pointwise mesh file containing the computational grid coordinates.
+
+The file stores:
+
+* Streamwise coordinates (x)
+* Wall-normal coordinates (y)
+
+which are reshaped into the structured mesh:
+
+$$
+(x_{grid}, y_{grid})
+$$
+
+with dimensions:
+
+$$
+(ni, nj)
+$$
+
+This mesh defines the target interpolation domain used throughout the modal decomposition process.
+
+---
+
+# `mean_flow.mat`
+
+MATLAB binary file containing the mean flow solution exported from the CFD solver.
+
+The file contains the mean flow state:
+
+$$
+\Phi_{mean} =
+\begin{bmatrix}
+p_{mean} \
+u_{mean} \
+v_{mean}
+\end{bmatrix}
+$$
+
+stored on the original CFD mesh.
+
+The variables are interpolated onto the structured Pointwise mesh before computing fluctuating quantities.
+
+---
+
+# `cl.out`
+
+Time history file of the lift coefficient:
+
+$$
+C_L(t)
+$$
+
+This file is used for:
+
+* Computing the mean lift coefficient
+
+$$
+\overline{C_L}
+$$
+
+* Selecting conditional snapshots satisfying:
+
+$$
+C_L > \overline{C_L}
+$$
+
+for construction of the lift-related conditional mode:
+
+$$
+\phi_{cl}
+$$
+
+---
+
+# `cd.out`
+
+Time history file of the drag coefficient:
+
+$$
+C_D(t)
+$$
+
+This file is used for:
+
+* Computing the mean drag coefficient
+
+$$
+\overline{C_D}
+$$
+
+* Selecting conditional residual snapshots satisfying:
+
+$$
+C_D > \overline{C_D}
+$$
+
+for construction of the drag-related conditional mode:
+
+$$
+\phi_{cd}
+$$
+
+---
+
+# `snapshot-*`
+
+Instantaneous CFD flow snapshots exported from the CFD solver.
+
+Each snapshot contains:
+
+$$
+\Phi =
+\begin{bmatrix}
+p \
+u \
+v
+\end{bmatrix}
+$$
+
+defined on the original CFD mesh.
+
+The snapshots are automatically loaded and sorted using Python `glob`.
+
+Each instantaneous field undergoes the following operations:
+
+1. Interpolation onto the structured Pointwise mesh
+2. Mean subtraction
+3. Construction of fluctuating fields
+
+$$
+\Phi' = \Phi - \Phi_{mean}
+$$
+
+4. Projection onto the conditional modes:
+
+$$
+a_{cl} = \langle \phi_{cl}, \Phi' \rangle
+$$
+
+$$
+a_{cd} = \langle \phi_{cd}, \Phi_{res} \rangle
+$$
+
+where:
+
+$$
+\Phi_{res}
+$$
+
+is the residual fluctuating field after removing the lift-related contribution.
 ---
 
 # Dependencies
