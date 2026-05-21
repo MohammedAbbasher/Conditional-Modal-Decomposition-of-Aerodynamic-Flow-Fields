@@ -1,11 +1,6 @@
 # Conditional Modal Decomposition of Aerodynamic Flow Fields
 
-This repository contains a Python implementation of a conditional modal decomposition framework for unsteady aerodynamic flow analysis.
-
-The methodology extracts coherent flow structures associated with lift and drag dynamics using conditional averaging and modal projection techniques applied to pressure and velocity fields.
-
-The workflow is designed for CFD post-processing of large datasets generated from unsteady simulations.
-
+This repository contains a Python implementation of a conditional modal decomposition framework for unsteady aerodynamic flow analysis. The methodology extracts coherent flow structures associated with lift and drag dynamics using conditional averaging and modal projection techniques applied to pressure and velocity fields.The workflow is designed for CFD post-processing of large datasets generated from unsteady simulations. For more details please visit:
 https://www.cambridge.org/core/journals/journal-of-fluid-mechanics/article/abs/structure-and-dynamics-of-the-laminar-separation-bubble/8DA7E999B511882B64AC059181D738FB
 
 ---
