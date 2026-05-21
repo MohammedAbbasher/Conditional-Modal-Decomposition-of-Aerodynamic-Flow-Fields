@@ -122,9 +122,9 @@ q_{ordered} = W q_{unordered}
 
 where:
 
-* ( q_{unordered} ) represents the original ANSYS field
-* ( q_{ordered} ) represents the structured Pointwise field
-* ( W ) is the sparse interpolation matrix
+* $ q_{unordered}$ represents the original ANSYS field
+* $q_{ordered}$ represents the structured Pointwise field
+* $ W $ is the sparse interpolation matrix
 
 The interpolation operator is constructed only once and reused throughout the simulation, significantly reducing computational cost.
 
@@ -134,15 +134,15 @@ The interpolation operator is constructed only once and reused throughout the si
 
 The lift mode is computed using snapshots satisfying:
 
-[
+$$
 CL > \overline{CL}
-]
+$$
 
 Similarly, the drag mode is constructed from residual fields satisfying:
 
-[
+$$
 CD > \overline{CD}
-]
+$$
 
 This approach isolates coherent structures associated with high-lift and high-drag events.
 
@@ -197,13 +197,6 @@ The code requires:
 
 * NumPy
 * SciPy
-
-Install using:
-
-```bash
-pip install numpy scipy
-```
-
 ---
 
 # Running the Code
@@ -236,27 +229,3 @@ Optional saving of modes and coefficients can be added using:
 ```python
 np.save(...)
 ```
-
----
-
-# Applications
-
-This framework can be used for:
-
-* Low-Reynolds-number aerodynamics
-* Laminar separation bubble analysis
-* Dynamic stall studies
-* Modal decomposition
-* Coherent structure identification
-* Reduced-order modeling
-* CFD post-processing
-
----
-
-# Notes
-
-* Physics and interpolation behavior are preserved relative to the original implementation.
-* Sparse interpolation matrices are reused to improve performance.
-* Nearest-neighbor interpolation is only applied outside the Delaunay triangulation region.
-
----
