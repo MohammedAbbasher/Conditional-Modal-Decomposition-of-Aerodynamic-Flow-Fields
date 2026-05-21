@@ -86,12 +86,7 @@ where $\Phi_{res}$ is the residual fluctuating field after removing the contribu
 ├── calculate_phi_cl.py
 ├── calculate_acl_and_phicd.py
 ├── calculate_phi_cd.py
-├── calculate_acd.py
-├── aoa_18.x
-├── mean_puv_aoa18.mat
-├── cl18.out
-├── cd18.out
-└── p18-*
+└── calculate_acd.py
 ```
 
 ---
@@ -116,9 +111,9 @@ The main routine performs the following operations:
 
 The interpolation is written as
 
-[
+$$
 q_{ordered} = W q_{unordered}
-]
+$$
 
 where:
 
