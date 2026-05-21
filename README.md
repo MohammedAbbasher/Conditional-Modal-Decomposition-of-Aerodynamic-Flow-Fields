@@ -59,9 +59,7 @@ $$
 a_{cd} = \langle \phi_{cd}, \Phi_{res} \rangle
 $$
 
-where
-
-$\Phi_{res}$ is the residual fluctuating field after removing the contribution of the lift mode.
+where $\Phi_{res}$ is the residual fluctuating field after removing the contribution of the lift mode.
 
 ---
 
@@ -72,7 +70,6 @@ $\Phi_{res}$ is the residual fluctuating field after removing the contribution o
 * Fast structured/unstructured mesh mapping
 * Reusable interpolation matrices
 * Nearest-neighbor fallback interpolation
-* Modular workflow
 * CFD-oriented data processing pipeline
 * Memory-efficient implementation
 
