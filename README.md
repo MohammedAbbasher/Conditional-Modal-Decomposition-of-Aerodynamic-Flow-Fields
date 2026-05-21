@@ -117,9 +117,9 @@ $$
 
 where:
 
-* $ q_{unordered}$ represents the original ANSYS field
+* $q_{unordered}$ represents the original ANSYS field
 * $q_{ordered}$ represents the structured Pointwise field
-* $ W $ is the sparse interpolation matrix
+* $W$ is the sparse interpolation matrix
 
 The interpolation operator is constructed only once and reused throughout the simulation, significantly reducing computational cost.
 
