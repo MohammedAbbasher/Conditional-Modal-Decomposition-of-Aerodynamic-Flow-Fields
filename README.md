@@ -383,13 +383,7 @@ $$
 a_{cd} = \langle \phi_{cd}, \Phi_{res} \rangle
 $$
 
-where:
-
-$$
-\Phi_{res}
-$$
-
-is the residual fluctuating field after removing the lift-related contribution.
+where $\Phi_{res}$ is the residual fluctuating field after removing the lift-related contribution.
 ---
 
 # Dependencies
