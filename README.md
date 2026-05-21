@@ -101,10 +101,9 @@ $$
 After removing the contribution of the lift mode, the residual fluctuating field is defined as:
 
 $$
-\Phi_{res}
-==========
+\Phi_{res} =
 
-## \Phi'
+\Phi'-
 
 a_{cl}\phi_{cl}
 $$
