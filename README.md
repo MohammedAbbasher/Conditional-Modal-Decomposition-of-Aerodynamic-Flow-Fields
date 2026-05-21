@@ -12,59 +12,58 @@ The workflow is designed for CFD post-processing of large datasets generated fro
 
 The instantaneous fluctuating flow field is defined as
 
-[
+$$
 \Phi' = \Phi - \Phi_{mean}
-]
+$$
 
 where
 
-[
+$$
 \Phi =
 \begin{bmatrix}
 p \
 u \
 v
 \end{bmatrix}
-]
+$$
 
 contains pressure and velocity components.
 
 The framework computes:
 
-* Lift-related conditional mode:
+Lift-related conditional mode:
 
-[
+$$
 \phi_{cl}
-]
+$$
 
-* Drag-related conditional mode:
+Drag-related conditional mode:
 
-[
+$$
 \phi_{cd}
-]
+$$
 
 together with their temporal modal coefficients:
 
-[
+$$
 a_{cl}, \quad a_{cd}
-]
+$$
 
 The modal coefficients are obtained through projection:
 
-[
+$$
 a_{cl} = \langle \phi_{cl}, \Phi' \rangle
-]
+$$
 
-[
+$$
 a_{cd} = \langle \phi_{cd}, \Phi_{res} \rangle
-]
+$$
 
 where
 
-[
+$$
 \Phi_{res}
-]
-
+$$
 is the residual fluctuating field after removing the contribution of the lift mode.
 
 ---
