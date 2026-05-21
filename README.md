@@ -61,10 +61,7 @@ $$
 
 where
 
-$
-\Phi_{res}
-$
-is the residual fluctuating field after removing the contribution of the lift mode.
+$\Phi_{res}$ is the residual fluctuating field after removing the contribution of the lift mode.
 
 ---
 
