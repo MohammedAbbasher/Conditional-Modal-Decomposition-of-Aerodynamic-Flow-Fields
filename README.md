@@ -6,6 +6,8 @@ The methodology extracts coherent flow structures associated with lift and drag 
 
 The workflow is designed for CFD post-processing of large datasets generated from unsteady simulations.
 
+https://www.cambridge.org/core/journals/journal-of-fluid-mechanics/article/abs/structure-and-dynamics-of-the-laminar-separation-bubble/8DA7E999B511882B64AC059181D738FB
+
 ---
 
 # Methodology
